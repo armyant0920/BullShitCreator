@@ -10,7 +10,7 @@ public class ChoiseLanguage extends JDialog {
     private String pickLanguage[];
 
 
-    private static String language[] = {"en", "zh-TW", "zh-CN", "ja", "ko", "th"};
+    private static String language[] = {"zh-TW", "zh-CN","en",  "ja", "ko", "th"};
 
     public ChoiseLanguage() {
         pickLanguage=new String[2];

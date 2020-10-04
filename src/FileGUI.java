@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class FileGUI {
 
@@ -18,12 +19,15 @@ class FileGUI {
     private TextArea textOutput;
     private JMenu fileMenu,editMenu;// 定義"檔案"和"子選單"選單
     private JMenuItem newItem, openItem, saveItem,saveOtherItem, closeItem;// 定義條目"退出"和"子條目"選單項
-    private JMenuItem languageItem;
+    private JMenuItem languageItem,fontItem;
     private FileDialog openDia, saveDia;// 定義"開啟 儲存"對話方塊
     private File file;//定義檔案
     private JPanel panel;
+    private int fontStyle;
     private String current;
-
+    private int fontSize=12;//預設值12
+    private static int Default_size[]={12,16,20,24,28,32};
+    private static final Dimension DEFAULT_SIZE=new Dimension(600,500);
     private TextField keyWord;
 
     FileGUI() {
@@ -56,7 +60,10 @@ class FileGUI {
         bar.add(fileMenu);//將檔案新增到選單欄上
         editMenu=new JMenu("編輯");
         languageItem=new JMenuItem("語言轉換");
+        fontItem=new JMenuItem("字體大小");
+
         editMenu.add(languageItem);
+        editMenu.add(fontItem);//增加字體大小調整
         bar.add(editMenu);
 
 
@@ -105,6 +112,10 @@ class FileGUI {
 
 
         //開啟選單項監聽
+        /**
+         * 這邊重複增加大量ActionListener好像有點太冗長,
+         * 之後可能會共用一個,但by case執行不同動作
+         */
         openItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openDia.setVisible(true); //顯得開啟檔案對話方塊
@@ -200,6 +211,33 @@ class FileGUI {
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
+
+
+            }
+        });
+
+        fontItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                ArrayList<Integer>sizeList=new ArrayList<>();
+                for(int i:Default_size){
+                    sizeList.add(i);
+
+                }
+                Object selectedValue = JOptionPane.showInputDialog(null, "請選擇字體大小", "更改文字大小",
+                        JOptionPane.INFORMATION_MESSAGE, null, sizeList.toArray(), sizeList.get(0));
+                if (selectedValue != null) {
+                    fontSize=(Integer) selectedValue;
+                    textOutput.setFont(new Font("",Font.PLAIN,fontSize));
+                    frame.pack();
+                    frame.repaint();
+                    frame.setSize(DEFAULT_SIZE);
+
+//                    frame.setBounds(300, 100, 600, 500);//設定窗體位置和大小
+
+                }
+
 
 
             }
