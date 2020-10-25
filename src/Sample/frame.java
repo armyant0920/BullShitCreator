@@ -76,14 +76,14 @@ class Mydialog extends JDialog {                     //自訂義的Dialog中我�
     }
 }
 
-    class testclass{                                     //一個隨便定義的Class  表示 Dialog也可以回傳給Frame 自訂義Class{
-        String s;
+class testclass {                                     //一個隨便定義的Class  表示 Dialog也可以回傳給Frame 自訂義Class{
+    String s;
 
-        public testclass(String ins) {
-            s = ins;
-        }
-
-        public String getS() {
-            return s;
-        }
+    public testclass(String ins) {
+        s = ins;
     }
+
+    public String getS() {
+        return s;
+    }
+}

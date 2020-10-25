@@ -15,6 +15,8 @@ import JsonTool.JSONArray;
  * &dt=t&q=
  *
  * Google API傳回來的是JSONARRAY
+ *
+ * 需特別注意,一次能轉換的字數似乎有上限,超過會exception
  */
 
 public class Translator {
@@ -26,9 +28,6 @@ public class Translator {
                 "sl=" + langFrom +
                 "&tl=" + langTo +
                 "&dt=t&q=" + URLEncoder.encode(word, "UTF-8");
-
-
-
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();

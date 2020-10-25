@@ -11,13 +11,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static javax.swing.JOptionPane.*;
+
 class FileGUI {
 
     private JFrame frame;// 定義窗體
     private JMenuBar bar;// 定義選單欄
     private TextArea textOutput;
-    private JMenu fileMenu,editMenu;// 定義"檔案"和"子選單"選單
-    private JMenuItem newItem, openItem, saveItem,saveOtherItem, closeItem;// 定義條目"退出"和"子條目"選單項
+    private JMenu fileMenu, editMenu;// 定義"檔案"和"子選單"選單
+    private JMenuItem newItem, openItem, saveItem, saveOtherItem, closeItem;// 定義條目"退出"和"子條目"選單項
     private JMenuItem languageItem;
     private FileDialog openDia, saveDia;// 定義"開啟 儲存"對話方塊
     private File file;//定義檔案
@@ -46,7 +48,7 @@ class FileGUI {
 
         openItem = new JMenuItem("開啟");//建立"開啟"選單項
         saveItem = new JMenuItem("儲存");//建立"儲存"選單項
-        saveOtherItem=new JMenuItem("另存");
+        saveOtherItem = new JMenuItem("另存");
         closeItem = new JMenuItem("退出");//建立“退出"選單項
         fileMenu.add(newItem);//將 開新檔 新增到檔案選單上
         fileMenu.add(openItem);//將 開啟 選單項新增到 檔案 選單上
@@ -54,8 +56,8 @@ class FileGUI {
         fileMenu.add(closeItem);//將 退出 選單項新增到 檔案 選單上
 
         bar.add(fileMenu);//將檔案新增到選單欄上
-        editMenu=new JMenu("編輯");
-        languageItem=new JMenuItem("語言轉換");
+        editMenu = new JMenu("編輯");
+        languageItem = new JMenuItem("語言轉換");
         editMenu.add(languageItem);
         bar.add(editMenu);
 
@@ -88,9 +90,9 @@ class FileGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (file != null || current != null) {
-                    int result = JOptionPane.showConfirmDialog(frame, "即將另開新檔,請確認目前檔案已儲存", "建立新檔",
-                            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (result == JOptionPane.YES_OPTION) {
+                    int result = showConfirmDialog(frame, "即將另開新檔,請確認目前檔案已儲存", "建立新檔",
+                            YES_NO_OPTION, WARNING_MESSAGE);
+                    if (result == YES_OPTION) {
                         createArticle();
 
                     }
@@ -126,7 +128,7 @@ class FileGUI {
                     bufr.close();//關閉檔案
 
                 } catch (FileNotFoundException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getClass(), "系統找不到指定的檔案。", JOptionPane.ERROR_MESSAGE);
+                    showMessageDialog(null, e1.getClass(), "系統找不到指定的檔案。", ERROR_MESSAGE);
                     System.out.println("系統找不到指定的檔案。");
                     e1.printStackTrace(); // 丟擲檔案路徑找不到異常
 
@@ -162,14 +164,14 @@ class FileGUI {
         saveOtherItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                    saveDia.setVisible(true);//顯示儲存檔案對話方塊
-                    String dirpath = saveDia.getDirectory();//獲取儲存檔案路徑並儲存到字串中。
-                    String fileName = saveDia.getFile() + ".txt";////獲取打儲存檔名稱並儲存到字串中
+                saveDia.setVisible(true);//顯示儲存檔案對話方塊
+                String dirpath = saveDia.getDirectory();//獲取儲存檔案路徑並儲存到字串中。
+                String fileName = saveDia.getFile() + ".txt";////獲取打儲存檔名稱並儲存到字串中
 
-                    if (dirpath == null || fileName == null)//判斷路徑和檔案是否為空
-                        return;//空操作
-                    else
-                        file = new File(dirpath, fileName);//檔案不為空，新建一個路徑和名稱
+                if (dirpath == null || fileName == null)//判斷路徑和檔案是否為空
+                    return;//空操作
+                else
+                    file = new File(dirpath, fileName);//檔案不為空，新建一個路徑和名稱
 
                 try {
                     BufferedWriter bufw = new BufferedWriter(new FileWriter(file));
@@ -185,23 +187,24 @@ class FileGUI {
         languageItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ChoiseLanguage dialog=new ChoiseLanguage();
+                ChoiseLanguage dialog = new ChoiseLanguage();
 
 //                dialog.setModal(true);
-                String[] chooice=dialog.getResult();
-                for(String s:chooice){
+                String[] chooice = dialog.getResult();
+                for (String s : chooice) {
                     System.out.println(s);
                 }
 
-                Translator t=new Translator();
+                Translator t = new Translator();
                 try {
-                    current=t.translate(chooice[0],chooice[1],current);
+                    current = t.translate(chooice[0], chooice[1], current);
                     textOutput.setText(current);
+                    showMessageDialog(null,chooice[0]+"->"+chooice[1]+"翻譯完成","翻譯完成", INFORMATION_MESSAGE);
                 } catch (Exception exception) {
                     exception.printStackTrace();
+                    showMessageDialog(null,chooice[0]+"->"+chooice[1]+"翻譯失敗","翻譯失敗", ERROR_MESSAGE);
+                    System.err.println("出現異常,請注意如果字數太多會出現403網頁異常");
                 }
-
-
             }
         });
 
@@ -226,36 +229,41 @@ class FileGUI {
         file = null;
         current = null;
         textOutput.setText("");
-        String inputValue = JOptionPane.showInputDialog("請輸入關鍵字");
+        String inputValue = showInputDialog("請輸入關鍵字");
 
-        ArrayList<String>options=new ArrayList<>();
-        for(int i=1;i<=6;i++){
-            String s=i*1000+"字";
+        ArrayList<String> options = new ArrayList<>();
+        for (int i = 1; i <= 6; i++) {
+            String s = i * 1000 + "字";
             options.add(s);
         }
 
         if (inputValue != null) {
 //            Object[] possibleValues = {"1000字", "2000字", "3000字", "4000字", "5000字", "6000字"};
-            Object[] possibleValues=options.toArray();
-            Object selectedValue = JOptionPane.showInputDialog(null, "請選擇產生文章長度", "輸出文章長度",
-                    JOptionPane.INFORMATION_MESSAGE, null, possibleValues, possibleValues[0]);
+            Object[] possibleValues = options.toArray();
+            Object selectedValue = showInputDialog(null, "請選擇產生文章長度", "輸出文章長度",
+                    INFORMATION_MESSAGE, null, possibleValues, possibleValues[0]);
             if (selectedValue == null) {
-                JOptionPane.showMessageDialog(null, "未輸入文章長度,使用預設值", "文章長度", JOptionPane.INFORMATION_MESSAGE);
+                showMessageDialog(null, "未輸入文章長度,使用預設值", "文章長度", INFORMATION_MESSAGE);
                 selectedValue = 6000;
             }
-            String s=(String)selectedValue;
-            s=s.substring(0,s.indexOf("字"));
+            String s = (String) selectedValue;
+            s = s.substring(0, s.indexOf("字"));
 
             current = EssayGenerator.essayGenerator(inputValue, Integer.parseInt(s));
             textOutput.setText(current);
-        }else{
-            JOptionPane.showMessageDialog(null, "無關鍵字,開啟空白新檔", "提醒", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            showMessageDialog(null, "無關鍵字,開啟空白新檔", "提醒", INFORMATION_MESSAGE);
 
 
         }
     }
 
+
+
     public static void main(String[] args) {
         new FileGUI();
     }
+
+
+
 }
